@@ -6,20 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('customer_saved_blogs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('customer_account_id')->constrained('customer_accounts')->cascadeOnDelete();
+            $table->foreignId('blog_id')->constrained('blogs')->cascadeOnDelete();
+            $table->timestamp('created_at')->useCurrent();
+            $table->primary(['customer_account_id', 'blog_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('customer_saved_blogs');

@@ -8,9 +8,18 @@ export type AppLayoutProps = {
 
 export type AppVariant = 'header' | 'sidebar';
 
+export type FlashToastPosition =
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'top-center'
+    | 'bottom-center';
+
 export type FlashToast = {
     type: 'success' | 'info' | 'warning' | 'error';
     message: string;
+    position?: FlashToastPosition;
 };
 
 export type AuthLayoutProps = {

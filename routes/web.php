@@ -1,11 +1,19 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthenticatedSessionController as AdminAuthenticatedSessionController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', [AdminAuthenticatedSessionController::class, 'create'])->name('home');
+Route::post('/', [AdminAuthenticatedSessionController::class, 'store'])->name('admin.login.store');
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('admin/dashboard', AdminDashboardController::class)->name('admin.dashboard');
+    Route::post('admin/logout', [AdminAuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
+});
 
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])

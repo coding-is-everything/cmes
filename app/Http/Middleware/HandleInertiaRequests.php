@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AdminUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -44,8 +46,12 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'currentTeam' => fn () => $user?->currentTeam ? $user->toUserTeam($user->currentTeam) : null,
-            'teams' => fn () => $user?->toUserTeams(includeCurrent: true) ?? [],
+            'adminSidebarOpen' => ! $request->hasCookie('admin_sidebar_state') || $request->cookie('admin_sidebar_state') === 'true',
+            'currentTeam' => fn () => $user instanceof User && $user->currentTeam ? $user->toUserTeam($user->currentTeam) : null,
+            'teams' => fn () => $user instanceof User ? $user->toUserTeams(includeCurrent: true) : [],
+            'admin' => fn () => $user instanceof AdminUser
+                ? $user->only(['id', 'admin_code', 'full_name', 'email'])
+                : null,
         ];
     }
 }
