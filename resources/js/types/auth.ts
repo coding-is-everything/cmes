@@ -14,6 +14,13 @@ export type Auth = {
     user: User;
 };
 
+export type AdminUser = {
+    id: number;
+    admin_code: string;
+    full_name: string;
+    email: string;
+};
+
 export type Passkey = {
     id: number;
     name: string;
