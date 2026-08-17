@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('document_versions', function (Blueprint $table) {
             $table->id();
-            $table->string('state_code', 20)->unique();
-            $table->string('state_name', 100)->unique();
-            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('document_versions');
     }
 };
