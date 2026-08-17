@@ -6,20 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('project_proprietors', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->foreignId('proprietor_id')->constrained('proprietors')->restrictOnDelete();
+            $table->enum('relationship_type', ['CURRENT', 'PREVIOUS', 'TRANSFEROR', 'TRANSFEREE'])->default('CURRENT');
+            $table->date('effective_from');
+            $table->date('effective_to')->nullable();
+            $table->boolean('is_current')->default(true);
+            $table->text('remarks')->nullable();
             $table->timestamps();
+
+            $table->index(['project_id', 'is_current']);
+            $table->index(['proprietor_id', 'is_current']);
+            $table->index(['effective_from', 'effective_to']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('project_proprietors');

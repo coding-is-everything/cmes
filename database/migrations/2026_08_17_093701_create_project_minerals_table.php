@@ -6,20 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('project_minerals', function (Blueprint $table) {
-            $table->id();
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->foreignId('mineral_id')->constrained('minerals')->restrictOnDelete();
+            $table->boolean('is_primary')->default(false);
             $table->timestamps();
+
+            $table->primary(['project_id', 'mineral_id']);
+            $table->index(['mineral_id', 'is_primary']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('project_minerals');
