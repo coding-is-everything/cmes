@@ -6,20 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('admin_user_roles', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('admin_user_id')->constrained('admin_users')->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
+            $table->primary(['admin_user_id', 'role_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('admin_user_roles');
